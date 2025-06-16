@@ -11,7 +11,6 @@ export function parseMath(str: string | Ast.Ast): Ast.Node[] {
     if (typeof str !== "string") {
         str = printRaw(str);
     }
-    const parser = unified()
-        .use(unifiedLatexFromString, { mode: "math" })
+    const parser = unified().use(unifiedLatexFromString, { mode: "math" });
     return (parser.parse({ value: str }) as Ast.Root).content;
 }
