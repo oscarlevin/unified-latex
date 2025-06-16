@@ -22,8 +22,11 @@ export function createMatchers() {
 
                 // whitespace directly after one-letter macros like `\o` should
                 // be skipped
-                if (nodes[0].content.length === 1 && nodesToTest[1].type === 'whitespace') {
-                    nodesToTest.length = 1
+                if (
+                    nodes[0].content.length === 1 &&
+                    nodesToTest[1].type === "whitespace"
+                ) {
+                    nodesToTest.length = 1;
                 }
             }
             return ligatureToUnicode(nodesToTest);

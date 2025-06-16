@@ -192,16 +192,16 @@ export const macroReplacements: Record<
         `Warning: There is no equivalent tag for \"noindent\", an empty Ast.String was used as a replacement.`
     ),
     latex: (node) => {
-        return htmlLike({tag: "latex"})
+        return htmlLike({ tag: "latex" });
     },
     latexe: (node) => {
-        return htmlLike({tag: "latex"})
+        return htmlLike({ tag: "latex" });
     },
     today: (node) => {
-        return htmlLike({tag: "today"})
+        return htmlLike({ tag: "today" });
     },
     tex: (node) => {
-        return htmlLike({tag: "tex"})
+        return htmlLike({ tag: "tex" });
     },
     //tex: factory("tex"),
     includegraphics: (node) => {

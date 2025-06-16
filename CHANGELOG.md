@@ -1,5 +1,13 @@
 # unified-latex Changelog
 
+### v1.8.3
+ - Support `\ref` in PreTeXt conversion
+ - Better use of UnifiedJS to parse but not print LaTeX
+ - Support for `\verb`, `\textsuperscript`, `\textsubscript`, `\sout`, and `\" i` in HTML conversion
+
+### v1.8.2
+ - Upgraded dependencies
+
 ### v1.8.1
  - Changed Peggy to implement a caching parser to prevent large slowdown on some files.
 

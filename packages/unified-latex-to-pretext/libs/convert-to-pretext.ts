@@ -12,7 +12,8 @@ import { Nodes, Root } from "xast";
  * Unified plugin to convert a `XAST` AST to a string.
  */
 export const xmlCompilePlugin: Plugin<void[], Root, string> = function () {
-    this.Compiler = (tree: Nodes | Nodes[]) => toXml(tree, { closeEmptyElements: true });
+    this.Compiler = (tree: Nodes | Nodes[]) =>
+        toXml(tree, { closeEmptyElements: true });
 };
 
 const _processor = processLatexViaUnified()

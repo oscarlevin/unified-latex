@@ -27,7 +27,7 @@ export const macros: MacroInfoRecord = {
     urladdr: {
         signature: "o m",
         renderInfo: { breakAround: true, inParMode: true },
-    }
-}
+    },
+};
 
 export const environments: EnvInfoRecord = {};

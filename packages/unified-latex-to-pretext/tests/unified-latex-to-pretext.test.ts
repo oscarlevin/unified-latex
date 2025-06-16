@@ -10,7 +10,10 @@ import { xmlCompilePlugin } from "../libs/convert-to-pretext";
 
 function normalizeHtml(str: string) {
     try {
-        return Prettier.format(str, { parser: "html", plugins: ["@prettier/plugin-xml"] })
+        return Prettier.format(str, {
+            parser: "html",
+            plugins: ["@prettier/plugin-xml"],
+        });
     } catch {
         console.warn("Could not format HTML string", str);
         return str;
@@ -91,10 +94,14 @@ describe("unified-latex-to-pretext:unified-latex-to-pretext", () => {
         expect(await normalizeHtml(html)).toEqual(await normalizeHtml(`ab`));
 
         html = process(`a% foo\n\nb`);
-        expect(await normalizeHtml(html)).toEqual(await normalizeHtml(`<p>a</p><p>b</p>`));
+        expect(await normalizeHtml(html)).toEqual(
+            await normalizeHtml(`<p>a</p><p>b</p>`)
+        );
 
         html = process(`a % foo\n\nb`);
-        expect(await normalizeHtml(html)).toEqual(await normalizeHtml(`<p>a</p><p>b</p>`));
+        expect(await normalizeHtml(html)).toEqual(
+            await normalizeHtml(`<p>a</p><p>b</p>`)
+        );
     });
 
     it("Wraps URLs", async () => {
@@ -189,10 +196,14 @@ describe("unified-latex-to-pretext:unified-latex-to-pretext", () => {
 
     it("Can wrap in <p>...</p> tags", async () => {
         html = process(`a\\par b`);
-        expect(await normalizeHtml(html)).toEqual(await normalizeHtml(`<p>a</p><p>b</p>`));
+        expect(await normalizeHtml(html)).toEqual(
+            await normalizeHtml(`<p>a</p><p>b</p>`)
+        );
 
         html = process(`a\n\n b`);
-        expect(await normalizeHtml(html)).toEqual(await normalizeHtml(`<p>a</p><p>b</p>`));
+        expect(await normalizeHtml(html)).toEqual(
+            await normalizeHtml(`<p>a</p><p>b</p>`)
+        );
 
         html = process(`a\n b\n\nc`);
         expect(await normalizeHtml(html)).toEqual(
@@ -225,7 +236,9 @@ describe("unified-latex-to-pretext:unified-latex-to-pretext", () => {
 
         // Custom labels are handled
         ast = process(`\\[a\\\\b\\]`);
-        expect(await normalizeHtml(ast)).toEqual(await normalizeHtml(`<me>a\\\\b</me>`));
+        expect(await normalizeHtml(ast)).toEqual(
+            await normalizeHtml(`<me>a\\\\b</me>`)
+        );
     });
 
     it("Ligatures that are nested inside of math mode are not replaced", async () => {
@@ -314,7 +327,9 @@ describe("unified-latex-to-pretext:unified-latex-to-pretext", () => {
         );
 
         ast = process(`\\begin{yyy}a\\end{yyy}`);
-        expect(await normalizeHtml(ast)).toEqual(await normalizeHtml(`<yyy>a</yyy>`));
+        expect(await normalizeHtml(ast)).toEqual(
+            await normalizeHtml(`<yyy>a</yyy>`)
+        );
 
         // Can override default-defined macros
         ast = process(`\\textbf{a}`);
@@ -354,7 +369,9 @@ describe("unified-latex-to-pretext:unified-latex-to-pretext", () => {
             `\\begin{yyy}a\\end{yyy}\\begin{yyy}\\begin{yyy}b\\end{yyy}c\\end{yyy}`
         );
         expect(await normalizeHtml(ast)).toEqual(
-            await normalizeHtml(`<yyy>a</yyy><yyy><yyy-child>b</yyy-child>c</yyy>`)
+            await normalizeHtml(
+                `<yyy>a</yyy><yyy><yyy-child>b</yyy-child>c</yyy>`
+            )
         );
     });
     it("converts theorem-like environments that have statements in ptx", async () => {
@@ -368,7 +385,7 @@ describe("unified-latex-to-pretext:unified-latex-to-pretext", () => {
     it("converts dfn to definition block", async () => {
         html = process(`\\begin{dfn}\na\n\\end{dfn}`);
         expect(await normalizeHtml(html)).toEqual(
-           await normalizeHtml(
+            await normalizeHtml(
                 `<definition><statement><p>a</p></statement></definition>`
             )
         );
@@ -376,7 +393,7 @@ describe("unified-latex-to-pretext:unified-latex-to-pretext", () => {
     it("Gives a theorem a title", async () => {
         html = process(`\\begin{theorem}[My Theorem]\na\n\nb\n\\end{theorem}`);
         expect(await normalizeHtml(html)).toEqual(
-           await normalizeHtml(
+            await normalizeHtml(
                 `<theorem><title>My Theorem</title><statement><p>a</p><p>b</p></statement></theorem>`
             )
         );
@@ -384,24 +401,32 @@ describe("unified-latex-to-pretext:unified-latex-to-pretext", () => {
     it("Gives an environment without statement a title", async () => {
         html = process(`\\begin{remark}[My remark]\na\n\\end{remark}`);
         return expect(await normalizeHtml(html)).toEqual(
-           await normalizeHtml(`<remark><title>My remark</title><p>a</p></remark>`)
+            await normalizeHtml(
+                `<remark><title>My remark</title><p>a</p></remark>`
+            )
         );
     });
     it("Replaces \\ref with a xref", async () => {
         html = process(`Exercise \\ref{foo} is important`);
         expect(await normalizeHtml(html)).toEqual(
-            await normalizeHtml(`Exercise <xref ref="foo" text="global"/> is important`)
+            await normalizeHtml(
+                `Exercise <xref ref="foo" text="global"/> is important`
+            )
         );
     });
     it("Replaces \\cref and \\Cref with a bare xref", async () => {
         html = process(`As we saw in \\cref{foo}, we can do this.`);
         expect(await normalizeHtml(html)).toEqual(
-            await normalizeHtml(`As we saw in <xref ref="foo"/>, we can do this.`)
+            await normalizeHtml(
+                `As we saw in <xref ref="foo"/>, we can do this.`
+            )
         );
 
         html = process(`As we saw in \\Cref{foo}, we can do this.`);
         expect(await normalizeHtml(html)).toEqual(
-            await normalizeHtml(`As we saw in <xref ref="foo" />, we can do this.`)
+            await normalizeHtml(
+                `As we saw in <xref ref="foo" />, we can do this.`
+            )
         );
     });
     it("Replaces \\cite with a xref", async () => {
@@ -412,6 +437,10 @@ describe("unified-latex-to-pretext:unified-latex-to-pretext", () => {
     });
     it("Replaces \\latex with <latex/> etc.", async () => {
         html = process(`We can write in \\latex or \\tex and do so \\today.`);
-        expect(await normalizeHtml(html)).toEqual(await normalizeHtml(`We can write in <latex/> or <tex/> and do so <today/>.`));
-    })
+        expect(await normalizeHtml(html)).toEqual(
+            await normalizeHtml(
+                `We can write in <latex/> or <tex/> and do so <today/>.`
+            )
+        );
+    });
 });
